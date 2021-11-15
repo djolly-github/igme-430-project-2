@@ -8,8 +8,10 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/remarkable/1.6.2/remarkable.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
 
   <link rel="shortcut icon" href="/hosted/assets/favicon.png"/>
+  <link rel="stylesheet" type="text/css" href="/hosted/shared.css"/>
   <link rel="stylesheet" type="text/css" href="/hosted/app.css"/>
 </head>
 <body>
@@ -17,15 +19,12 @@
     <div class="navlink"><a href="/logout">Log out</a></div>
   </nav>
   <section id="client"></section>
-  <!-- TODO: REPLACE DOMO
-  <section id="makeDomo">
-  </section>
-  <section id="domos">
-  </section>
-  <div id="domoMessage"><img id="speech" src="/assets/img/speech.png" alt="speech box"/>
-    <h3><span id="errorMessage"></span></h3><img id="domo" src="assets/img/domo.png" alt="domo"/>
+  <div id="notificationContainer" class="notification">
+    <button><i class="fas fa-times"></i></button>
+    <p class="message">
+      <span>Error goes here</span>
+    </p>
   </div>
-  -->
   <script src="/hosted/utility.js"></script>
   <script src="/hosted/app.js"></script>
 </body>

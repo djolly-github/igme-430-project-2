@@ -1,13 +1,15 @@
 const handleError = (message) => {
-  /* TO-DO: remove domo */
-	$("#errorMessage").text(message);
-	$("#domoMessage").animate({width:'toggle'},350);
+	$("#notificationContainer .message span").text(message);
+	$("#notificationContainer").toggleClass('active', true);
 }
 
 const redirect = (response) => {
-  /* TO-DO: remove domo */
-	$("#domoMessage").animate({width:'hide'},350);
+	$("#notificationContainer").toggleClass('active', false);
 	window.location = response.redirect;
+}
+
+const closeNotification = (object) => {
+  $("#notificationContainer").toggleClass('active', false);
 }
 
 const sendAjax = (type, action, data, success) => {

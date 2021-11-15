@@ -5,6 +5,13 @@ const TestComponent = (props) => {
 };
 
 const setup = (csrf) => {
+  const closeNotifButton = document.querySelector("#notificationContainer button");
+
+  closeNotifButton.addEventListener("click", (e) => {
+    e.preventDefault();
+    closeNotification();
+  });
+
   ReactDOM.render(
     <TestComponent />,
     document.querySelector("#client"),

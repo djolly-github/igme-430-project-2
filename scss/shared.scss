@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito&family=Space+Mono&display=swap');
+
+$primary-font: 'Nunito', sans-serif;
+$mono-font: 'Space Mono', monospace;
+$app-transition: 0.25s cubic-bezier(.3,0,0,1);
+
+@mixin round($padding, $elevated: false) {
+  border-radius: 2rem;
+  padding: $padding;
+
+  @if $elevated {
+    box-shadow: 1px 10px 25px 0px rgba(0,0,0,0.4);
+  } @else {
+    box-shadow: none;
+  }
+}
+
+@mixin control($back: #fecf59, $fore: black) {
+  transition: $app-transition;
+  transition-property: background-color;
+
+  border-radius: 0.25rem;
+
+  background-color: $back;
+  color: $fore;
+
+  border-color: darken($back, 25%);
+  border-style: solid;
+
+  &:hover {
+    background-color: darken($back, 25%);
+  }
+}
+
+body {
+  background-color: #8cd3ea;
+  color: black;
+  font-family: $primary-font;
+  .notification {
+    @include round(2rem, true);
+    opacity: 0;
+    transition: $app-transition;
+    transition-property: opacity;
+    background-color: white;
+    position: absolute;
+    bottom: 2rem;
+    right: 2rem;
+    width: 25vw;
+    height: 16rem;
+    font-size: 2rem;
+    font-family: $mono-font;
+    &.active {
+      opacity: 1;
+    }
+    button {
+      position: absolute;
+      right: 2rem;
+      @include round(1rem);
+      @include control();
+    }
+  }
+}

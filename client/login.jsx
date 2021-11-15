@@ -1,8 +1,7 @@
 const handleLogin = (e) => {
   e.preventDefault();
 
-  /* TO-DO: remove domo */
-  $("#domoMessage").animate({width:'hide'},350);
+  $("#notificationContainer").toggleClass('active', false);
 
   if ($("#user").val() == '' || $("#pass").val() == '') {
     handleError("Username or password is empty");
@@ -19,8 +18,7 @@ const handleLogin = (e) => {
 const handleSignup = (e) => {
   e.preventDefault();
 
-  /* TO-DO: remove domo */
-  $("#domoMessage").animate({width:'hide'},350);
+  $("#notificationContainer").toggleClass('active', false);
 
   if ($("#user").val() == '' || $("#pass").val() == '' || $("#pass2").val() == '') {
     handleError("All fields are required");
@@ -101,6 +99,7 @@ const createSignupWindow = (csrf) => {
 const setup = (csrf) => {
   const loginButton = document.querySelector("#loginButton");
   const signupButton = document.querySelector("#signupButton");
+  const closeNotifButton = document.querySelector("#notificationContainer button");
 
   signupButton.addEventListener("click", (e) => {
     e.preventDefault();
@@ -112,6 +111,11 @@ const setup = (csrf) => {
     e.preventDefault();
     createLoginWindow(csrf);
     return false;
+  });
+
+  closeNotifButton.addEventListener("click", (e) => {
+    e.preventDefault();
+    closeNotification();
   });
 
   createLoginWindow(csrf);
