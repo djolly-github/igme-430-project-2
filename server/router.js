@@ -48,6 +48,13 @@ const router = (app) => {
     mid.requiresLogout,
     ctrl.Account.loginPage,
   );
+
+  // route home page
+  app.get(
+    ROUTES.home,
+    mid.requiresLogin,
+    ctrl.App.page,
+  );
 };
 
 module.exports = router;
