@@ -10,6 +10,7 @@ const ROUTES = {
   login: '/login',
   signup: '/signup',
   logout: '/logout',
+  passwordChange: '/changePassword',
 };
 
 module.exports.ROUTES = ROUTES;

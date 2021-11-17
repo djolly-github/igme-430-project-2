@@ -128,8 +128,38 @@ const getToken = (request, response) => {
   res.json(csrfJSON);
 };
 
+/**
+ * Handler for user password change
+ * @param {*} request request object
+ * @param {*} response response object
+ * @returns response.status().json() depending on request parameters
+ */
+const changePassword = (request, response) => {
+  const req = request;
+  const res = response;
+
+  const { username } = req.session.account;
+  const oldPass = `${req.body.resetOldPass}`;
+  const newPass = `${req.body.resetNewPass}`;
+
+  return Account.AccountModel.authenticate(username, oldPass, (err, account) => {
+    if (err || !account) {
+      return res.status(401).json({ error: 'Old password was incorrect' });
+    }
+
+    return Account.AccountModel.updatePassword(username, newPass, (errUpd) => {
+      if (errUpd) {
+        return res.status(400).json({ error: 'An error occurred' });
+      }
+
+      return res.status(200).json({ message: 'Password changed successfully' });
+    });
+  });
+};
+
 module.exports.loginPage = loginPage;
 module.exports.login = login;
 module.exports.logout = logout;
 module.exports.signup = signup;
 module.exports.getToken = getToken;
+module.exports.changePassword = changePassword;

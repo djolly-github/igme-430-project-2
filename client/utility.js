@@ -8,7 +8,7 @@ const redirect = (response) => {
 	window.location = response.redirect;
 }
 
-const closeNotification = (object) => {
+const closeNotification = () => {
   $("#notificationContainer").toggleClass('active', false);
 }
 

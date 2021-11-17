@@ -40,7 +40,7 @@ const runLint = (done) => {
 const watch = () => {
   gulp.watch('./assets/*', copyAssets);
   gulp.watch('./scss/*', buildSass);
-  gulp.watch(['./client/*.js', './client/*.jsx'], buildJs);
+  gulp.watch(['./client/**/*.js', './client/**/*.jsx'], buildJs);
   nodemon({
     script: './server/app.js',
     ignore: ['client/', 'node_modules/'],

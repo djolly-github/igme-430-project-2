@@ -55,6 +55,13 @@ const router = (app) => {
     mid.requiresLogin,
     ctrl.App.page,
   );
+
+  // route password confirm for password reset
+  app.post(
+    ROUTES.passwordChange,
+    mid.requiresLogin,
+    ctrl.Account.changePassword,
+  );
 };
 
 module.exports = router;
