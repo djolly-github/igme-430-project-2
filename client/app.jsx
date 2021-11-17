@@ -1,25 +1,35 @@
-const handleChangePassword = (e) => {
+/**
+ * Handler for change password form submit
+ * @param {*} e event object
+ * @returns false
+ */
+const onChangePassword = (e) => {
   e.preventDefault();
 
   if ($("#resetNewPass").val() !== $("#resetConfirmPass").val()) {
-    handleError(("Passwords do not match"));
+    openNotification(("Passwords do not match"));
     return false;
   }
 
   sendAjax('POST', $("#changePasswordForm").attr("action"), $("#changePasswordForm").serialize(), (response) => {
-    closeNotification();
-    renderTestComponent($("input[name=_csrf]").val());
+    createMainAppWindow($("input[name=_csrf]").val());
+    openNotification("Password changed successfully");
   });
 
   return false;
 };
 
-const ChangePassword = (props) => {
+/**
+ * View for the Change Password Window
+ * @param {*} props React props
+ * @returns React component
+ */
+const ChangePasswordWindow = (props) => {
   return (
     <form
       id="changePasswordForm"
       name="changePasswordForm"
-      onSubmit={handleChangePassword}
+      onSubmit={onChangePassword}
       action="/changePassword"
       method="POST"
     >
@@ -38,21 +48,30 @@ const ChangePassword = (props) => {
   );
 };
 
-const renderChangePassword = (csrf) => {
+/**
+ * Creates the change password window component
+ * @param {*} csrf Cross Site Request Forgery token
+ */
+const createChangePassword = (csrf) => {
   ReactDOM.render(
-    <ChangePassword csrf={csrf} />,
+    <ChangePasswordWindow csrf={csrf} />,
     document.querySelector("#client"),
   );
 };
 
-const TestComponent = (props) => {
+/**
+ * View for the Main App Window
+ * @param {*} props React props
+ * @returns React component
+ */
+const MainAppWindow = (props) => {
   return (
     <div>
       <p>
         App is running properly!
       </p>
       <button
-        onClick={() => renderChangePassword(props.csrf)}
+        onClick={() => createChangePassword(props.csrf)}
       >
         Change Password
       </button>
@@ -60,13 +79,21 @@ const TestComponent = (props) => {
   );
 };
 
-const renderTestComponent = (csrf) => {
+/**
+ * Creates the main app window component
+ * @param {*} csrf Cross Site Request Forgery token
+ */
+const createMainAppWindow = (csrf) => {
   ReactDOM.render(
-    <TestComponent csrf={csrf} />,
+    <MainAppWindow csrf={csrf} />,
     document.querySelector("#client"),
   );
 };
 
+/**
+ * Sets up the app page after token retrieval on document ready
+ * @param {*} csrf Cross Site Request Forgery token
+ */
 const setup = (csrf) => {
   const closeNotifButton = document.querySelector("#notificationContainer button");
 
@@ -75,9 +102,10 @@ const setup = (csrf) => {
     closeNotification();
   });
 
-  renderTestComponent(csrf);
+  createMainAppWindow(csrf);
 };
 
+// get token on doc ready and pass setup as callback
 $(document).ready(function() {
   getToken(setup);
 });

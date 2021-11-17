@@ -1,4 +1,4 @@
-const handleError = (message) => {
+const openNotification = (message) => {
 	$("#notificationContainer .message span").text(message);
 	$("#notificationContainer").toggleClass('active', true);
 }
@@ -22,7 +22,7 @@ const sendAjax = (type, action, data, success) => {
 		success: success,
 		error: function(xhr, status, error) {
 			var messageObj = JSON.parse(xhr.responseText);
-			handleError(messageObj.error);
+			openNotification(messageObj.error);
 		},
 	});
 };

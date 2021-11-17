@@ -1,10 +1,15 @@
+/**
+ * Handler for login form submit
+ * @param {*} e event object
+ * @returns false (to exit early)
+ */
 const handleLogin = (e) => {
   e.preventDefault();
 
   $("#notificationContainer").toggleClass('active', false);
 
   if ($("#user").val() == '' || $("#pass").val() == '') {
-    handleError("Username or password is empty");
+    openNotification("Username or password is empty");
     return false;
   }
 
@@ -15,18 +20,23 @@ const handleLogin = (e) => {
   return false;
 };
 
-const handleSignup = (e) => {
+/**
+ * Handler for signup form submit
+ * @param {*} e event object
+ * @returns false (to exit early)
+ */
+const onSignup = (e) => {
   e.preventDefault();
 
   $("#notificationContainer").toggleClass('active', false);
 
   if ($("#user").val() == '' || $("#pass").val() == '' || $("#pass2").val() == '') {
-    handleError("All fields are required");
+    openNotification("All fields are required");
     return false;
   }
 
   if ($("#pass").val() !== $("#pass2").val()) {
-    handleError(("Passwords do not match"));
+    openNotification(("Passwords do not match"));
     return false;
   }
 
@@ -35,6 +45,11 @@ const handleSignup = (e) => {
   return false;
 };
 
+/**
+ * View for the Login Window
+ * @param {*} props React props
+ * @returns React component
+ */
 const LoginWindow = (props) => {
   return (
     <form
@@ -57,12 +72,17 @@ const LoginWindow = (props) => {
   );
 };
 
+/**
+ * View for the Signup Window
+ * @param {*} props React props
+ * @returns React component
+ */
 const SignupWindow = (props) => {
   return (
     <form
       id="signupForm"
       name="signupForm"
-      onSubmit={handleSignup}
+      onSubmit={onSignup}
       action="/signup"
       method="POST"
       className="mainForm"
@@ -82,6 +102,10 @@ const SignupWindow = (props) => {
   );
 };
 
+/**
+ * Creates the login window component
+ * @param {*} csrf Cross Site Request Forgery token
+ */
 const createLoginWindow = (csrf) => {
   ReactDOM.render(
     <LoginWindow csrf={csrf} />,
@@ -89,6 +113,10 @@ const createLoginWindow = (csrf) => {
   );
 };
 
+/**
+ * Creates the signup window component
+ * @param {*} csrf Cross Site Request Forgery token
+ */
 const createSignupWindow = (csrf) => {
   ReactDOM.render(
     <SignupWindow csrf={csrf} />,
@@ -96,6 +124,10 @@ const createSignupWindow = (csrf) => {
   );
 };
 
+/**
+ * Sets up the login page after token retrieval on document ready
+ * @param {*} csrf Cross Site Request Forgery token
+ */
 const setup = (csrf) => {
   const loginButton = document.querySelector("#loginButton");
   const signupButton = document.querySelector("#signupButton");
@@ -121,6 +153,7 @@ const setup = (csrf) => {
   createLoginWindow(csrf);
 };
 
+// get token on doc ready and pass setup as callback
 $(document).ready(function() {
   getToken(setup);
 });
