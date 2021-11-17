@@ -15,27 +15,58 @@ $app-transition: 0.25s cubic-bezier(.3,0,0,1);
   }
 }
 
-@mixin control($back: #fecf59, $fore: black) {
+@mixin control($border: true, $back: #fecf59, $fore: black) {
   transition: $app-transition;
   transition-property: background-color;
 
   border-radius: 0.25rem;
+  padding: 0.5rem;
 
   background-color: $back;
   color: $fore;
+  font-size: 1.25rem;
 
-  border-color: darken($back, 25%);
-  border-style: solid;
+  @if ($border) {
+    border-color: darken($back, 25%);
+    border-style: solid;
+  }
 
   &:hover {
     background-color: darken($back, 25%);
   }
 }
 
+html,body {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
 body {
   background-color: #8cd3ea;
   color: black;
   font-family: $primary-font;
+  nav {
+    position: fixed;
+    display: block;
+    margin: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4rem;
+    background-color: #fecf59;
+    display: flex;
+    .navlink {
+      @include control(false);
+      display: flex;
+      align-items: center;
+      padding: 0 1rem;
+      a {
+        text-decoration: none;
+      }
+    }
+  }
   .notification {
     @include round(2rem, true);
     opacity: 0;
@@ -56,6 +87,16 @@ body {
       position: absolute;
       right: 2rem;
       @include round(1rem);
+      @include control();
+    }
+  }
+  .control {
+    display: flex;
+    flex-direction: column;
+    * {
+      flex: 0 0 100%;
+    }
+    input {
       @include control();
     }
   }

@@ -60,14 +60,20 @@ const LoginWindow = (props) => {
       method="POST"
       className="mainForm"
     >
-      <label htmlFor="username">Username: </label>
-      <input id="user" type="text" name="username" placeholder="username"/>
+      <div class="control">
+        <label htmlFor="username">Username: </label>
+        <input id="user" type="text" name="username" placeholder="username"/>
+      </div>
 
-      <label htmlFor="pass">Password: </label>
-      <input id="pass" type="password" name="pass" placeholder="password"/>
+      <div class="control">
+        <label htmlFor="pass">Password: </label>
+        <input id="pass" type="password" name="pass" placeholder="password"/>
+      </div>
 
-      <input type="hidden" name="_csrf" value={props.csrf}/>
-      <input className="formSubmit" type="submit" value="Sign In" />
+      <div class="control">
+        <input type="hidden" name="_csrf" value={props.csrf}/>
+        <input className="formSubmit" type="submit" value="Sign In" />
+      </div>
     </form>
   );
 };
@@ -87,17 +93,25 @@ const SignupWindow = (props) => {
       method="POST"
       className="mainForm"
     >
-      <label htmlFor="username">Username: </label>
-      <input id="user" type="text" name="username" placeholder="username"/>
+      <div class="control">
+        <label htmlFor="username">Username: </label>
+        <input id="user" type="text" name="username" placeholder="username"/>
+      </div>
 
-      <label htmlFor="pass">Password: </label>
-      <input id="pass" type="password" name="pass" placeholder="password"/>
+      <div class="control">
+        <label htmlFor="pass">Password: </label>
+        <input id="pass" type="password" name="pass" placeholder="password"/>
+      </div>
 
-      <label htmlFor="pass2">Password: </label>
-      <input id="pass2" type="password" name="pass2" placeholder="retype password"/>
+      <div class="control">
+        <label htmlFor="pass2">Password: </label>
+        <input id="pass2" type="password" name="pass2" placeholder="retype password"/>
+      </div>
 
-      <input type="hidden" name="_csrf" value={props.csrf}/>
-      <input className="formSubmit" type="submit" value="Sign Up" />
+      <div class="control">
+        <input type="hidden" name="_csrf" value={props.csrf}/>
+        <input className="formSubmit" type="submit" value="Sign Up" />
+      </div>
     </form>
   );
 };
