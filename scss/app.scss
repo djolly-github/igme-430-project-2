@@ -1,0 +1,17 @@
+#client {
+  padding-top: 4rem;
+  height: 100%;
+  #changePasswordForm {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    .control {
+      margin: 1rem 0;
+      width: 100%;
+      max-width: calc(2rem * 12);
+    }
+  }
+}

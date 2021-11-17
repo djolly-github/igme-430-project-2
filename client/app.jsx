@@ -33,17 +33,33 @@ const ChangePasswordWindow = (props) => {
       action="/changePassword"
       method="POST"
     >
-      <label htmlFor="resetOldPass">Old Password: </label>
-      <input id="resetOldPass" name="resetOldPass" type="text" placeholder="old" />
+      <p>Fill out the information below to change your password</p>
 
-      <label htmlFor="resetNewPass">New Password: </label>
-      <input id="resetNewPass" name="resetNewPass" type="text" placeholder="new" />
+      <div class="control">
+        <label htmlFor="resetOldPass">Old Password: </label>
+        <input id="resetOldPass" name="resetOldPass" type="text" placeholder="old" />
+      </div>
 
-      <label htmlFor="resetConfirmPass">Confirm Password: </label>
-      <input id="resetConfirmPass" name="resetConfirmPass" type="text" placeholder="confirm new" />
+      <div class="control">
+        <label htmlFor="resetNewPass">New Password: </label>
+        <input id="resetNewPass" name="resetNewPass" type="text" placeholder="new" />
+      </div>
+
+      <div class="control">
+        <label htmlFor="resetConfirmPass">Confirm Password: </label>
+        <input id="resetConfirmPass" name="resetConfirmPass" type="text" placeholder="confirm new" />
+      </div>
 
       <input type="hidden" name="_csrf" value={props.csrf} />
-      <input className="formSubmit" type="submit" value="Change Password" />
+
+      <div class="control group">
+        <button
+          onClick={() => createMainAppWindow(props.csrf)}
+        >
+          Go Back
+        </button>
+        <input className="formSubmit" type="submit" value="Change Password" />
+      </div>
     </form>
   );
 };

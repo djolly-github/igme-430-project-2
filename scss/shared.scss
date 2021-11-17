@@ -86,17 +86,28 @@ body {
     button {
       position: absolute;
       right: 2rem;
+      width: 3rem;
+      height: 3rem;
       @include round(1rem);
       @include control();
+    }
+    .message {
+      margin: 0 4rem 0 0;
     }
   }
   .control {
     display: flex;
     flex-direction: column;
+    &.group {
+      flex-direction: row;
+    }
     * {
+      flex: 1 1 auto;
+    }
+    label {
       flex: 0 0 100%;
     }
-    input {
+    input, button {
       @include control();
     }
   }
