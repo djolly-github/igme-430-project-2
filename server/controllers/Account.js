@@ -168,7 +168,7 @@ const togglePremium = (request, response) => {
   const req = request;
   const res = response;
   
-  return Account.AccountModel.togglePremium(req.session.account, (err) => {
+  return Account.AccountModel.togglePremium(req.session.account.username, (err) => {
     if (err) {
       return res.status(500).json({ error: 'An error occurred' });
     }
@@ -177,6 +177,25 @@ const togglePremium = (request, response) => {
   });
 };
 
+/**
+ * Handler for user premium status get
+ * @param {*} request request object
+ * @param {*} response response object
+ * @returns response.status().json() depending on request parameters
+ */
+const getPremiumStatus = (request, response) => {
+  const req = request;
+  const res = response;
+
+  return Account.AccountModel.findByUsername(req.session.account.username, (err, doc) => {
+    if (err || !doc) {
+      return res.status(500).json({ error: 'An error occurred' });
+    }
+
+    return res.status(200).json({ isPremium: doc.isPremium });
+  });
+}
+
 module.exports.loginPage = loginPage;
 module.exports.login = login;
 module.exports.logout = logout;
@@ -184,3 +203,4 @@ module.exports.signup = signup;
 module.exports.getToken = getToken;
 module.exports.changePassword = changePassword;
 module.exports.togglePremium = togglePremium;
+module.exports.getPremiumStatus = getPremiumStatus;

@@ -75,6 +75,53 @@ const createChangePassword = (csrf) => {
   );
 };
 
+const onTogglePremium = (csrf) => {
+  sendAjax('POST', '/premium', `_csrf=${csrf}`, (response) => {
+    createTogglePremium(csrf);
+    openNotification("Premium status toggled successfully");
+  });
+};
+
+const TogglePremiumWindow = (props) => {
+  const premiumStatement = props.isPremium ? 'have' : 'do not have';
+  return (
+    <div>
+      <h2>Premium</h2>
+      <p>With premium, you have access to styling note text, labels, checklists, deadlines</p>
+      <ul>
+        <li>Text styling: no longer will your tasks be just plaintext!</li>
+        <li>Labels: categorize your tasks and search for them later!</li>
+        <li>Checklists: make your tasks a list of tasks!</li>
+        <li>Deadlines: add deadlines to your tasks!</li>
+      </ul>
+      <p>You currently {premiumStatement} premium</p>
+      <p>Toggle Premium?</p>
+      <button
+        onClick={(e) => onTogglePremium(props.csrf)}
+      >
+        Sure!
+      </button>
+      <button
+        onClick={(e) => createMainAppWindow(props.csrf)}
+      >
+        Go Back!
+      </button>
+    </div>
+  );
+};
+
+const createTogglePremium = (csrf) => {
+  sendAjax('GET', '/premium', `_csrf=${csrf}`, (response) => {
+    ReactDOM.render(
+      <TogglePremiumWindow
+        csrf={csrf}
+        isPremium={response.isPremium}
+      />,
+      document.querySelector("#client"),
+    );
+  });
+};
+
 /**
  * View for the Main App Window
  * @param {*} props React props
@@ -90,6 +137,11 @@ const MainAppWindow = (props) => {
         onClick={() => createChangePassword(props.csrf)}
       >
         Change Password
+      </button>
+      <button
+        onClick={() => createTogglePremium(props.csrf)}
+      >
+        Toggle Premium
       </button>
     </div>
   );

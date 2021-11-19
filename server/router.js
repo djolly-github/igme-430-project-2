@@ -60,7 +60,23 @@ const router = (app) => {
   app.post(
     ROUTES.passwordChange,
     mid.requiresLogin,
+    mid.requiresSecure,
     ctrl.Account.changePassword,
+  );
+
+  // route premium status
+  app.get(
+    ROUTES.premiumStatus,
+    mid.requiresLogin,
+    ctrl.Account.getPremiumStatus,
+  );
+
+  // route premium toggle
+  app.post(
+    ROUTES.premiumStatus,
+    mid.requiresLogin,
+    mid.requiresSecure,
+    ctrl.Account.togglePremium,
   );
 };
 

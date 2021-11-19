@@ -11,6 +11,7 @@ const ROUTES = {
   signup: '/signup',
   logout: '/logout',
   passwordChange: '/changePassword',
+  premiumStatus: '/premium',
 };
 
 module.exports.ROUTES = ROUTES;
