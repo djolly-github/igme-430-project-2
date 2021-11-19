@@ -167,7 +167,7 @@ const changePassword = (request, response) => {
 const togglePremium = (request, response) => {
   const req = request;
   const res = response;
-  
+
   return Account.AccountModel.togglePremium(req.session.account.username, (err) => {
     if (err) {
       return res.status(500).json({ error: 'An error occurred' });
@@ -194,7 +194,7 @@ const getPremiumStatus = (request, response) => {
 
     return res.status(200).json({ isPremium: doc.isPremium });
   });
-}
+};
 
 module.exports.loginPage = loginPage;
 module.exports.login = login;

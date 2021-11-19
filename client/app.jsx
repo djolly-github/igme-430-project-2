@@ -75,13 +75,27 @@ const createChangePassword = (csrf) => {
   );
 };
 
+/**
+ * Handler for toggle premium button click
+ * @param {*} csrf Cross Site Request Forgery token
+ * @returns false
+ */
 const onTogglePremium = (csrf) => {
+  e.preventDefault();
+
   sendAjax('POST', '/premium', `_csrf=${csrf}`, (response) => {
     createTogglePremium(csrf);
     openNotification("Premium status toggled successfully");
   });
+
+  return false;
 };
 
+/**
+ * View for the Toggle Premium Window
+ * @param {*} props React props
+ * @returns React component
+ */
 const TogglePremiumWindow = (props) => {
   const premiumStatement = props.isPremium ? 'have' : 'do not have';
   return (
@@ -97,7 +111,7 @@ const TogglePremiumWindow = (props) => {
       <p>You currently {premiumStatement} premium</p>
       <p>Toggle Premium?</p>
       <button
-        onClick={(e) => onTogglePremium(props.csrf)}
+        onClick={(e) => onTogglePremium(e, props.csrf)}
       >
         Sure!
       </button>
@@ -110,6 +124,10 @@ const TogglePremiumWindow = (props) => {
   );
 };
 
+/**
+ * Creates the toggle premium window component
+ * @param {*} csrf Cross Site Request Forgery token
+ */
 const createTogglePremium = (csrf) => {
   sendAjax('GET', '/premium', `_csrf=${csrf}`, (response) => {
     ReactDOM.render(

@@ -52,7 +52,7 @@ const AccountSchema = new mongoose.Schema({
   isPremium: {
     type: Boolean,
     default: false,
-  }
+  },
 });
 
 /**
@@ -147,15 +147,20 @@ AccountSchema.statics.updatePassword = (username, password, callback) => {
  * @param {*} username The username of the account to update
  * @param {*} callback Function to call on result of toggle
  */
+// eslint will error for immediately returning for arrow-body-style,
+// then will error if arrow-body-style is fixed because of max line length,
+// then will error if max line length is fixed for disallowing line breaks after arrow body,
+// so just disable this error instead
+// eslint-disable-next-line arrow-body-style
 AccountSchema.statics.togglePremium = (username, callback) => {
-  AccountModel.findByUsername(username, (err, doc) => {
+  return AccountModel.findByUsername(username, (err, doc) => {
     if (err || !doc) {
       return callback(err);
     }
 
-    AccountModel.updateOne({ username }, { isPremium: !doc.isPremium }, (err) => {
-      if (err) {
-        return callback(err);
+    return AccountModel.updateOne({ username }, { isPremium: !doc.isPremium }, (errUpd) => {
+      if (errUpd) {
+        return callback(errUpd);
       }
 
       return callback();
