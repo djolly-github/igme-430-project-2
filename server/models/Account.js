@@ -49,6 +49,10 @@ const AccountSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  isPremium: {
+    type: Boolean,
+    default: false,
+  }
 });
 
 /**
@@ -129,6 +133,27 @@ AccountSchema.statics.authenticate = (username, password, callback) => {
 AccountSchema.statics.updatePassword = (username, password, callback) => {
   return AccountModel.generateHash(password, (salt, pass) => {
     AccountModel.updateOne({ username }, { password: pass, salt }, (err) => {
+      if (err) {
+        return callback(err);
+      }
+
+      return callback();
+    });
+  });
+};
+
+/**
+ * Toggles premium on a user account
+ * @param {*} username The username of the account to update
+ * @param {*} callback Function to call on result of toggle
+ */
+AccountSchema.statics.togglePremium = (username, callback) => {
+  AccountModel.findByUsername(username, (err, doc) => {
+    if (err || !doc) {
+      return callback(err);
+    }
+
+    AccountModel.updateOne({ username }, { isPremium: !doc.isPremium }, (err) => {
       if (err) {
         return callback(err);
       }
