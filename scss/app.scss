@@ -5,19 +5,6 @@
   height: 100%;
   width: 80%;
   margin: auto;
-  form {
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    .control {
-      margin: 1rem 0;
-      width: 100%;
-      max-width: calc(2rem * 12);
-    }
-  }
   .taskList {
     height: 60%;
     overflow-y: auto;
@@ -39,5 +26,61 @@
         flex: 1 1 auto;
       }
     }
+  }
+}
+
+form {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  .control {
+    margin: 1rem 0;
+    width: 100%;
+    max-width: calc(2rem * 12);
+  }
+}
+
+#newTaskForm {
+  position: absolute;
+  transition: $app-transition;
+  transition-property: all;
+  opacity: 0;
+  transform: scale(0);
+  top: 5vh;
+  bottom: 5vh;
+  left: 5vw;
+  right: 5vw;
+  z-index: 98;
+  width: unset;
+  background-color: white;
+  &:before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    background-color: #0009;
+    top: -15vh;
+    bottom: -15vh;
+    left: -15vw;
+    right: -15vw;
+  }
+  &:after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    background-color: white;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+  }
+  &.active {
+    opacity: 1;
+    transform: scale(1);
+  }
+  .control * {
+    flex: 1 1 auto;
   }
 }

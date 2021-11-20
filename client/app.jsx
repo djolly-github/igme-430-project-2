@@ -145,11 +145,85 @@ const createTogglePremium = (csrf) => {
 };
 
 /**
+ * Component for Task editing
+ * @param {*} props React props
+ * @returns React component
+ */
+const TaskEditor = (props) => {
+  const onClose = (e) => {
+    e.preventDefault();
+    $('#newTaskForm').toggleClass('active', false);
+    new Promise((resolve, reject) => {
+      setTimeout(() => ReactDOM.unmountComponentAtNode(document.querySelector('#editor')), 250);
+    });
+
+    return false;
+  };
+
+  const onTaskCreate = (e) => {
+    e.preventDefault();
+  
+    if (!$("#taskTitle").val()) {
+      openNotification('Title is required for task');
+      return false;
+    }
+  
+    sendAjax('POST', '/task', $('#newTaskForm').serialize(), () => {
+      getToken(createMainAppWindow);
+      onClose(e);
+      openNotification(props._id ? 'Task updated successfully' : 'Task created successfully');
+    });
+  
+    return false;
+  };
+
+  return (
+    <form
+      id="newTaskForm"
+      name="newTaskForm"
+      onSubmit={onTaskCreate}
+      action="/task"
+      method="POST"
+    >
+      <button
+        className="closeButton"
+        onClick={(e) => onClose(e)}
+      >
+        <i className="fas fa-times"></i>
+      </button>
+
+      <div className="control">
+        <label htmlFor="taskTitle">Task Title: </label>
+        <input id="taskTitle" type="text" name="title" placeholder="title" defaultValue={props.title || ''}/>
+      </div>
+
+      <div className="control">
+        <label htmlFor="taskContent">Task Content: </label>
+        <textarea id="taskContent" name="content" placeholder="plaintext" defaultValue={props.content || ''}/>
+      </div>
+
+      <div className="control">
+        <input type="hidden" name="_csrf" value={props.csrf}/>
+        {
+          props._id ? <input type="hidden" name="_id" value={props._id}/> : null
+        }
+        <input className="formSubmit" type="submit" value={props._id ? 'Update' : 'Create'} />
+      </div>
+    </form>
+  );
+}
+
+/**
  * Component for Tasks
  * @param {*} props React props
  * @returns React component
  */
 const TaskItem = (props) => {
+  /**
+   * Handler for the Delete button
+   * @param {*} e event caller object
+   * @returns false
+   */
   const onTaskDelete = (e) => {
     e.preventDefault();
 
@@ -157,12 +231,34 @@ const TaskItem = (props) => {
       openNotification('Deleted successfully');
       createMainAppWindow(props.csrf);
     });
+
+    return false;
   };
 
+  /**
+   * Handler for the View/Edit button
+   * @param {*} e event caller object
+   * @returns false
+   */
   const onTaskViewEdit = (e) => {
     e.preventDefault();
 
-    console.log(props);
+    ReactDOM.render(
+      <TaskEditor
+        csrf={props.csrf}
+        title={props.title}
+        content={props.content}
+        _id={props._id}
+      />,
+      document.querySelector("#editor"),
+    );
+
+    closeNotification();
+    new Promise((resolve, reject) => {
+      setTimeout(() => $('#newTaskForm').toggleClass('active', true), 50);
+    });
+
+    return false;
   };
 
   return (
@@ -200,24 +296,56 @@ const TaskItem = (props) => {
  * @returns React component
  */
 const TaskList = (props) => {
+  /**
+   * Handler for the New Task button
+   * @param {*} e event caller object
+   * @returns false
+   */
+  const onNewTask = (e) => {
+    e.preventDefault();
+
+    ReactDOM.render(
+      <TaskEditor csrf={props.csrf} />,
+      document.querySelector("#editor"),
+    );
+
+    closeNotification();
+    new Promise((resolve, reject) => {
+      setTimeout(() => $('#newTaskForm').toggleClass('active', true), 50);
+    });
+
+    return false;
+  };
+
   if (props.tasks) {
     return (
-      <div
-        className="taskList"
-      >
-        {
-          props.tasks.map((task) => {
-            return (
-              <TaskItem
-                _id={task._id}
-                title={task.title}
-                content={task.content}
-                csrf={props.csrf}
-                key={task._id}
-              />
-            )
-          })
-        }
+      <div>
+        <div
+          className="control group"
+        >
+          <button
+            onClick={(e) => onNewTask(e)}
+          >
+            New Task
+          </button>
+        </div>
+        <div
+          className="taskList"
+        >
+          {
+            props.tasks.map((task) => {
+              return (
+                <TaskItem
+                  _id={task._id}
+                  title={task.title}
+                  content={task.content}
+                  csrf={props.csrf}
+                  key={task._id}
+                />
+              )
+            })
+          }
+        </div>
       </div>
     );
   }
@@ -227,23 +355,6 @@ const TaskList = (props) => {
       <p>No tasks exist yet</p>
     </div>
   );
-};
-
-const onTaskCreate = (e) => {
-  e.preventDefault();
-
-  if (!$("#taskTitle").val()) {
-    openNotification('Title is required for task');
-    return false;
-  }
-
-  sendAjax('POST', '/task', $('#newTaskForm').serialize(), () => {
-    getToken(createMainAppWindow);
-    $("#newTaskForm").find('input[type=text]').val('');
-    openNotification('Task created successfully');
-  });
-
-  return false;
 };
 
 /**
@@ -268,29 +379,6 @@ const MainAppWindow = (props) => {
           Toggle Premium
         </button>
       </div>
-
-      <form
-        id="newTaskForm"
-        name="newTaskForm"
-        onSubmit={onTaskCreate}
-        action="/task"
-        method="POST"
-      >
-        <div className="control">
-          <label htmlFor="taskTitle">Task Title: </label>
-          <input id="taskTitle" type="text" name="title" placeholder="title"/>
-        </div>
-
-        <div className="control">
-          <label htmlFor="taskContent">Task Content: </label>
-          <input id="taskContent" type="text" name="content" placeholder="plaintext"/>
-        </div>
-
-        <div className="control">
-          <input type="hidden" name="_csrf" value={props.csrf}/>
-          <input className="formSubmit" type="submit" value="Make Task" />
-        </div>
-      </form>
 
       <div
         id="taskList"

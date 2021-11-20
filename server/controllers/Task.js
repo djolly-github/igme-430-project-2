@@ -37,6 +37,21 @@ const createTask = (request, response) => {
     return res.status(400).json({ error: 'Task title is required' });
   }
 
+  if (req.body._id) {
+    const updated = {
+      title: req.body.title,
+      content: req.body.content,
+    };
+
+    return Task.TaskModel.updateOne({ _id: req.body._id }, updated, (err) => {
+      if (err) {
+        return res.status(500).json({ error: 'An error occurred' });
+      }
+
+      return res.status(200).json({ message: 'Task updated' });
+    });
+  }
+
   const taskData = {
     title: req.body.title,
     content: req.body.content,

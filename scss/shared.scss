@@ -36,11 +36,38 @@ $app-transition: 0.25s cubic-bezier(.3,0,0,1);
   }
 }
 
-html,body {
+html, body {
   padding: 0;
   margin: 0;
   height: 100%;
   overflow: hidden;
+}
+
+* {
+  scrollbar-width: auto;
+  scrollbar-color: #fecf59 darken(#8cd3ea, 25%);
+}
+
+*::-webkit-scrollbar {
+  width: 1rem;
+}
+
+*::-webkit-scrollbar-track {
+  background: darken(#8cd3ea, 25%);
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #fecf59;
+}
+
+.closeButton {
+  position: absolute;
+  right: 2rem;
+  top: 2rem;
+  width: 3rem;
+  height: 3rem;
+  @include round(1rem);
+  @include control();
 }
 
 body {
@@ -81,17 +108,10 @@ body {
     height: 16rem;
     font-size: 2rem;
     font-family: $mono-font;
+    z-index: 99;
     &.active {
       opacity: 1;
       transform: scale(1);
-    }
-    button {
-      position: absolute;
-      right: 2rem;
-      width: 3rem;
-      height: 3rem;
-      @include round(1rem);
-      @include control();
     }
     .message {
       margin: 0 4rem 0 0;
@@ -109,7 +129,7 @@ body {
     label {
       flex: 0 0 100%;
     }
-    input, button {
+    input, button, textarea {
       @include control();
     }
   }
