@@ -2,6 +2,7 @@ const ROUTES = {
   /// data-related retrieval/etc. ///
 
   _getToken: '/getToken',
+  _task: '/task',
 
   /// pages/user actions ///
 

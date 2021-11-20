@@ -141,6 +141,95 @@ const createTogglePremium = (csrf) => {
 };
 
 /**
+ * Component for Tasks
+ * @param {*} props React props
+ * @returns React component
+ */
+const TaskItem = (props) => {
+  const onTaskDelete = (e) => {
+    e.preventDefault();
+
+    sendAjax('DELETE', '/task', `_id=${props._id}&_csrf=${props.csrf}`, () => {
+      openNotification('Deleted successfully');
+      createMainAppWindow(props.csrf);
+    });
+  };
+
+  const onTaskViewEdit = (e) => {
+    e.preventDefault();
+
+    console.log(props);
+  };
+
+  return (
+    <div>
+      <p>{ props.title }</p>
+      <button
+        onClick={(e) => onTaskViewEdit(e)}
+      >
+        <i class="fas fa-eye"></i>
+        View/Edit
+      </button>
+      <button
+        onClick={(e) => onTaskDelete(e)}
+      >
+        <i class="fas fa-trash"></i>
+        Delete
+      </button>
+    </div>
+  );
+};
+
+/**
+ * Component container for Tasks
+ * @param {*} props React props
+ * @returns React component
+ */
+const TaskList = (props) => {
+  if (props.tasks) {
+    return (
+      <div>
+        {
+          props.tasks.map((task) => {
+            return (
+              <TaskItem
+                _id={task._id}
+                title={task.title}
+                content={task.content}
+                csrf={props.csrf}
+              />
+            )
+          })
+        }
+      </div>
+    );
+  }
+  
+  return (
+    <div>
+      <p>No tasks exist yet</p>
+    </div>
+  );
+};
+
+const onTaskCreate = (e) => {
+  e.preventDefault();
+
+  if (!$("#taskTitle").val()) {
+    openNotification('Title is required for task');
+    return false;
+  }
+
+  sendAjax('POST', '/task', $('#newTaskForm').serialize(), () => {
+    getToken(createMainAppWindow);
+    $("#newTaskForm").find('input[type=text]').val('');
+    openNotification('Task created successfully');
+  });
+
+  return false;
+};
+
+/**
  * View for the Main App Window
  * @param {*} props React props
  * @returns React component
@@ -161,6 +250,34 @@ const MainAppWindow = (props) => {
       >
         Toggle Premium
       </button>
+
+      <form
+        id="newTaskForm"
+        name="newTaskForm"
+        onSubmit={onTaskCreate}
+        action="/task"
+        method="POST"
+      >
+        <div class="control">
+          <label htmlFor="taskTitle">Task Title: </label>
+          <input id="taskTitle" type="text" name="title" placeholder="title"/>
+        </div>
+
+        <div class="control">
+          <label htmlFor="taskContent">Task Content: </label>
+          <input id="taskContent" type="text" name="content" placeholder="plaintext"/>
+        </div>
+
+        <div class="control">
+          <input type="hidden" name="_csrf" value={props.csrf}/>
+          <input className="formSubmit" type="submit" value="Make Task" />
+        </div>
+      </form>
+
+      <div
+        id="taskList"
+      >
+      </div>
     </div>
   );
 };
@@ -174,6 +291,16 @@ const createMainAppWindow = (csrf) => {
     <MainAppWindow csrf={csrf} />,
     document.querySelector("#client"),
   );
+
+  sendAjax('GET', '/task', `_csrf=${csrf}`, (response) => {
+    ReactDOM.render(
+      <TaskList
+        tasks={response.tasks || []}
+        csrf={csrf}
+      />,
+      document.querySelector("#taskList"),
+    );
+  });
 };
 
 /**

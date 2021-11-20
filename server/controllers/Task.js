@@ -13,12 +13,7 @@ const getTasks = (request, response) => {
   const req = request;
   const res = response;
 
-  if (req.findByLabel !== undefined) {
-    // TODO
-    return res.status(501).json({ error: 'Labels have not yet been implemented' });
-  }
-
-  return Task.findByOwner(req.session.account._id, (err, docs) => {
+  return Task.TaskModel.findByOwner(req.session.account._id, (err, docs) => {
     if (err) {
       console.log(err);
       return res.status(400).json({ error: 'An error occurred' });

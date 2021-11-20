@@ -78,6 +78,30 @@ const router = (app) => {
     mid.requiresSecure,
     ctrl.Account.togglePremium,
   );
+
+  // route task list retrieval
+  app.get(
+    ROUTES._task,
+    mid.requiresLogin,
+    mid.requiresSecure,
+    ctrl.Task.getTasks,
+  );
+
+  // route task creation
+  app.post(
+    ROUTES._task,
+    mid.requiresLogin,
+    mid.requiresSecure,
+    ctrl.Task.createTask,
+  );
+
+  // route task deletion
+  app.delete(
+    ROUTES._task,
+    mid.requiresLogin,
+    mid.requiresSecure,
+    ctrl.Task.deleteTask,
+  );
 };
 
 module.exports = router;
