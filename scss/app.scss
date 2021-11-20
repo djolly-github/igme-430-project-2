@@ -1,7 +1,11 @@
+@import './shared.scss';
+
 #client {
   padding-top: 4rem;
   height: 100%;
-  #changePasswordForm {
+  width: 80%;
+  margin: auto;
+  form {
     width: 100%;
     display: flex;
     flex-wrap: wrap;
@@ -12,6 +16,28 @@
       margin: 1rem 0;
       width: 100%;
       max-width: calc(2rem * 12);
+    }
+  }
+  .taskList {
+    height: 60%;
+    overflow-y: auto;
+    .task {
+      @include round(0.25rem, 0.25rem);
+      display: flex;
+      align-items: center;
+      background-color: #eee;
+      margin: 0 0.25rem 0.25rem;
+      padding: 1rem;
+      .taskTitle {
+        flex: 0 0 50%;
+        text-overflow: ellipsis;
+        font-size: 2rem;
+        line-height: 2rem;
+        margin: 0 0 0 1rem;
+      }
+      .control.group {
+        flex: 1 1 auto;
+      }
     }
   }
 }

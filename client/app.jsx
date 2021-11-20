@@ -35,24 +35,24 @@ const ChangePasswordWindow = (props) => {
     >
       <p>Fill out the information below to change your password</p>
 
-      <div class="control">
+      <div className="control">
         <label htmlFor="resetOldPass">Old Password: </label>
-        <input id="resetOldPass" name="resetOldPass" type="text" placeholder="old" />
+        <input id="resetOldPass" name="resetOldPass" type="password" placeholder="old" />
       </div>
 
-      <div class="control">
+      <div className="control">
         <label htmlFor="resetNewPass">New Password: </label>
-        <input id="resetNewPass" name="resetNewPass" type="text" placeholder="new" />
+        <input id="resetNewPass" name="resetNewPass" type="password" placeholder="new" />
       </div>
 
-      <div class="control">
+      <div className="control">
         <label htmlFor="resetConfirmPass">Confirm Password: </label>
-        <input id="resetConfirmPass" name="resetConfirmPass" type="text" placeholder="confirm new" />
+        <input id="resetConfirmPass" name="resetConfirmPass" type="password" placeholder="confirm new" />
       </div>
 
       <input type="hidden" name="_csrf" value={props.csrf} />
 
-      <div class="control group">
+      <div className="control group">
         <button
           onClick={() => createMainAppWindow(props.csrf)}
         >
@@ -80,7 +80,7 @@ const createChangePassword = (csrf) => {
  * @param {*} csrf Cross Site Request Forgery token
  * @returns false
  */
-const onTogglePremium = (csrf) => {
+const onTogglePremium = (e, csrf) => {
   e.preventDefault();
 
   sendAjax('POST', '/premium', `_csrf=${csrf}`, (response) => {
@@ -110,16 +110,20 @@ const TogglePremiumWindow = (props) => {
       </ul>
       <p>You currently {premiumStatement} premium</p>
       <p>Toggle Premium?</p>
-      <button
-        onClick={(e) => onTogglePremium(e, props.csrf)}
+      <div
+        className="control group"
       >
-        Sure!
-      </button>
-      <button
-        onClick={(e) => createMainAppWindow(props.csrf)}
-      >
-        Go Back!
-      </button>
+        <button
+          onClick={(e) => createMainAppWindow(props.csrf)}
+        >
+          Go Back!
+        </button>
+        <button
+          onClick={(e) => onTogglePremium(e, props.csrf)}
+        >
+          Sure!
+        </button>
+      </div>
     </div>
   );
 };
@@ -162,20 +166,30 @@ const TaskItem = (props) => {
   };
 
   return (
-    <div>
-      <p>{ props.title }</p>
-      <button
-        onClick={(e) => onTaskViewEdit(e)}
+    <div
+      className="task"
+    >
+      <p
+        className="taskTitle"
       >
-        <i class="fas fa-eye"></i>
-        View/Edit
-      </button>
-      <button
-        onClick={(e) => onTaskDelete(e)}
+        { props.title }
+      </p>
+      <div
+        className="control group"
       >
-        <i class="fas fa-trash"></i>
-        Delete
-      </button>
+        <button
+          onClick={(e) => onTaskViewEdit(e)}
+        >
+          <i className="fas fa-eye"></i>
+          View/Edit
+        </button>
+        <button
+          onClick={(e) => onTaskDelete(e)}
+        >
+          <i className="fas fa-trash"></i>
+          Delete
+        </button>
+      </div>
     </div>
   );
 };
@@ -188,7 +202,9 @@ const TaskItem = (props) => {
 const TaskList = (props) => {
   if (props.tasks) {
     return (
-      <div>
+      <div
+        className="taskList"
+      >
         {
           props.tasks.map((task) => {
             return (
@@ -197,6 +213,7 @@ const TaskList = (props) => {
                 title={task.title}
                 content={task.content}
                 csrf={props.csrf}
+                key={task._id}
               />
             )
           })
@@ -237,19 +254,20 @@ const onTaskCreate = (e) => {
 const MainAppWindow = (props) => {
   return (
     <div>
-      <p>
-        App is running properly!
-      </p>
-      <button
-        onClick={() => createChangePassword(props.csrf)}
+      <div
+        className="control group"
       >
-        Change Password
-      </button>
-      <button
-        onClick={() => createTogglePremium(props.csrf)}
-      >
-        Toggle Premium
-      </button>
+        <button
+          onClick={() => createChangePassword(props.csrf)}
+        >
+          Change Password
+        </button>
+        <button
+          onClick={() => createTogglePremium(props.csrf)}
+        >
+          Toggle Premium
+        </button>
+      </div>
 
       <form
         id="newTaskForm"
@@ -258,17 +276,17 @@ const MainAppWindow = (props) => {
         action="/task"
         method="POST"
       >
-        <div class="control">
+        <div className="control">
           <label htmlFor="taskTitle">Task Title: </label>
           <input id="taskTitle" type="text" name="title" placeholder="title"/>
         </div>
 
-        <div class="control">
+        <div className="control">
           <label htmlFor="taskContent">Task Content: </label>
           <input id="taskContent" type="text" name="content" placeholder="plaintext"/>
         </div>
 
-        <div class="control">
+        <div className="control">
           <input type="hidden" name="_csrf" value={props.csrf}/>
           <input className="formSubmit" type="submit" value="Make Task" />
         </div>
