@@ -1,0 +1,13 @@
+{ 
+  "extends": "airbnb/base",
+  "rules": {
+    "no-underscore-dangle" : "off",
+    "no-plusplus": "off",
+    "import/extensions": "off"
+  },
+  "ignorePatterns": [
+    "gulpFile.js",
+    "hosted/",
+    "client/"
+  ]
+}
