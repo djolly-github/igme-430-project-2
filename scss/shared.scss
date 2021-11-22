@@ -134,3 +134,11 @@ body {
     }
   }
 }
+
+@media screen and (max-aspect-ratio: 5/6) {
+  body {
+    .notification {
+      width: calc(100vw - 8rem);
+    }
+  }
+}
