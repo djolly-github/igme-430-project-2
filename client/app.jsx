@@ -1,3 +1,5 @@
+const { useState } = React;
+
 /**
  * Handler for change password form submit
  * @param {*} e event object
@@ -150,6 +152,9 @@ const createTogglePremium = (csrf) => {
  * @returns React component
  */
 const TaskEditor = (props) => {
+  const [isEditingContent, setEditingContent] = useState(false);
+  const [currentEditedContent, setEditedContent] = useState(props.content);
+  
   const onClose = (e) => {
     e.preventDefault();
     $('#newTaskForm').toggleClass('active', false);
@@ -177,6 +182,14 @@ const TaskEditor = (props) => {
     return false;
   };
 
+  const onToggleEdit = (e) => {
+    e.preventDefault();
+    setEditingContent(!isEditingContent);
+    if (e.target.type === 'textarea') {
+      setEditedContent(e.target.value);
+    }
+  }
+
   return (
     <form
       id="newTaskForm"
@@ -202,10 +215,38 @@ const TaskEditor = (props) => {
         <input id="taskValue" type="number" min="0" name="value" placeholder="0+" defaultValue={props.value || 0}/>
       </div>
 
-      <div className="control">
-        <label htmlFor="taskContent">Task Content: </label>
-        <textarea id="taskContent" name="content" placeholder="plaintext" defaultValue={props.content || ''}/>
-      </div>
+      {
+        isEditingContent
+          ?
+            <div className="control">
+              <label htmlFor="taskContent">Task Content: </label>
+              <textarea
+                id="taskContent"
+                name="content"
+                placeholder="plaintext"
+                defaultValue={currentEditedContent || ''}
+                onBlur={onToggleEdit}
+                autoFocus
+              />
+            </div>
+          :
+            <div className="control">
+              <p>Task Content: </p>
+              <div
+                onClick={onToggleEdit}
+                className="contentEditClosed"
+              >
+                {
+                  currentEditedContent
+                    ? <p>{currentEditedContent}</p>
+                    : <i>No content entered</i>
+                }
+              </div>
+              <input type="hidden" name="content" value={currentEditedContent}/>
+            </div>
+      }
+
+      
 
       <div className="control">
         <input type="hidden" name="_csrf" value={props.csrf}/>

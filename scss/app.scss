@@ -82,8 +82,28 @@ form {
     opacity: 1;
     transform: scale(1);
   }
-  .control * {
-    flex: 1 1 auto;
+  .control {
+    * {
+      flex: 1 1 auto;
+    }
+    p {
+      margin: 0;
+    }
+  }
+  .contentEditClosed {
+    @include control(true, white);
+    transition: $app-transition;
+    transition-property: all;
+    height: calc(12rem - 20px);
+    overflow-y: scroll;
+    white-space: pre;
+    &:hover {
+      background-color: #aaa;
+    }
+  }
+  #taskContent {
+    height: 12rem;
+    overflow-y: scroll;
   }
 }
 
