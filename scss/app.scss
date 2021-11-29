@@ -94,7 +94,8 @@ form {
     @include control(true, white);
     transition: $app-transition;
     transition-property: all;
-    height: calc(12rem - 20px);
+    height: 12rem;
+    box-sizing: content-box;
     overflow-y: scroll;
     white-space: pre;
     &:hover {
