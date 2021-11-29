@@ -27,6 +27,11 @@ const TaskSchema = new mongoose.Schema({
   content: {
     type: String,
   },
+  value: {
+    type: Number,
+    min: 0,
+    default: 0,
+  },
 });
 
 /**
@@ -38,6 +43,7 @@ TaskSchema.statics.toAPI = (doc) => ({
   // _id is built into your mongo document and is guaranteed to be unique
   title: doc.title,
   content: doc.content,
+  value: doc.value,
   _id: doc._id,
 });
 
@@ -55,7 +61,7 @@ TaskSchema.statics.toAPI = (doc) => ({
 TaskSchema.statics.findByOwner = (ownerId, callback) => {
   return TaskModel
     .find({ owner: convertId(ownerId) })
-    .select('title content _id')
+    .select('title content value _id')
     .lean()
     .exec(callback);
 };

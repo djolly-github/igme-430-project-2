@@ -198,6 +198,11 @@ const TaskEditor = (props) => {
       </div>
 
       <div className="control">
+        <label htmlFor="taskValue">Experience Value: </label>
+        <input id="taskValue" type="number" min="0" name="value" placeholder="0+" defaultValue={props.value || 0}/>
+      </div>
+
+      <div className="control">
         <label htmlFor="taskContent">Task Content: </label>
         <textarea id="taskContent" name="content" placeholder="plaintext" defaultValue={props.content || ''}/>
       </div>
@@ -224,14 +229,29 @@ const TaskItem = (props) => {
    * @param {*} e event caller object
    * @returns false
    */
-  const onTaskDelete = (e) => {
+  const onTaskDelete = (e, msg = 'Deleted successfully') => {
     e.preventDefault();
 
     sendAjax('DELETE', '/task', `_id=${props._id}&_csrf=${props.csrf}`, () => {
-      openNotification('Deleted successfully');
+      openNotification(msg);
       createMainAppWindow(props.csrf);
     });
 
+    return false;
+  };
+
+  /**
+   * Handler for the Complete button
+   * @param {*} e event caller object
+   * @returns false
+   */
+  const onTaskComplete = (e) => {
+    e.preventDefault();
+
+    sendAjax('POST', '/exp', `experience=${props.exp + (props.value || 0)}&_csrf=${props.csrf}`, () => {
+      onTaskDelete(e, 'Completed successfully');
+    });
+    
     return false;
   };
 
@@ -248,6 +268,7 @@ const TaskItem = (props) => {
         csrf={props.csrf}
         title={props.title}
         content={props.content}
+        value={props.value}
         _id={props._id}
       />,
       document.querySelector("#editor"),
@@ -278,6 +299,12 @@ const TaskItem = (props) => {
         >
           <i className="fas fa-eye"></i>
           View/Edit
+        </button>
+        <button
+          onClick={(e) => onTaskComplete(e)}
+        >
+          <i className="fas fa-check-circle"></i>
+          Complete
         </button>
         <button
           onClick={(e) => onTaskDelete(e)}
@@ -339,7 +366,9 @@ const TaskList = (props) => {
                   _id={task._id}
                   title={task.title}
                   content={task.content}
+                  value={task.value}
                   csrf={props.csrf}
+                  exp={props.exp}
                   key={task._id}
                 />
               )
@@ -381,6 +410,12 @@ const MainAppWindow = (props) => {
       </div>
 
       <div
+
+      >
+        <p>Experience: { props.exp }</p>
+      </div>
+
+      <div
         id="taskList"
       >
       </div>
@@ -393,20 +428,26 @@ const MainAppWindow = (props) => {
  * @param {*} csrf Cross Site Request Forgery token
  */
 const createMainAppWindow = (csrf) => {
-  ReactDOM.render(
-    <MainAppWindow csrf={csrf} />,
-    document.querySelector("#client"),
-  );
-
-  sendAjax('GET', '/task', `_csrf=${csrf}`, (response) => {
+  sendAjax('GET', '/exp', `_csrf=${csrf}`, (mainResp) => {
     ReactDOM.render(
-      <TaskList
-        tasks={response.tasks || []}
+      <MainAppWindow
+        exp={mainResp.experience}
         csrf={csrf}
       />,
-      document.querySelector("#taskList"),
+      document.querySelector("#client"),
     );
-  });
+  
+    sendAjax('GET', '/task', `_csrf=${csrf}`, (listResp) => {
+      ReactDOM.render(
+        <TaskList
+          tasks={listResp.tasks || []}
+          csrf={csrf}
+          exp={mainResp.experience}
+        />,
+        document.querySelector("#taskList"),
+      );
+    });
+  })
 };
 
 /**

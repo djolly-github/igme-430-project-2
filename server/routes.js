@@ -3,6 +3,7 @@ const ROUTES = {
 
   _getToken: '/getToken',
   _task: '/task',
+  _experience: '/exp',
 
   /// pages/user actions ///
 
