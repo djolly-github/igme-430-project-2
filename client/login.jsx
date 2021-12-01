@@ -60,17 +60,17 @@ const LoginWindow = (props) => {
       method="POST"
       className="mainForm"
     >
-      <div class="control">
+      <div className="control">
         <label htmlFor="username">Username: </label>
         <input id="user" type="text" name="username" placeholder="username"/>
       </div>
 
-      <div class="control">
+      <div className="control">
         <label htmlFor="pass">Password: </label>
         <input id="pass" type="password" name="pass" placeholder="password"/>
       </div>
 
-      <div class="control">
+      <div className="control">
         <input type="hidden" name="_csrf" value={props.csrf}/>
         <input className="formSubmit" type="submit" value="Sign In" />
       </div>
@@ -93,22 +93,22 @@ const SignupWindow = (props) => {
       method="POST"
       className="mainForm"
     >
-      <div class="control">
+      <div className="control">
         <label htmlFor="username">Username: </label>
         <input id="user" type="text" name="username" placeholder="username"/>
       </div>
 
-      <div class="control">
+      <div className="control">
         <label htmlFor="pass">Password: </label>
         <input id="pass" type="password" name="pass" placeholder="password"/>
       </div>
 
-      <div class="control">
+      <div className="control">
         <label htmlFor="pass2">Password: </label>
         <input id="pass2" type="password" name="pass2" placeholder="retype password"/>
       </div>
 
-      <div class="control">
+      <div className="control">
         <input type="hidden" name="_csrf" value={props.csrf}/>
         <input className="formSubmit" type="submit" value="Sign Up" />
       </div>
@@ -145,7 +145,6 @@ const createSignupWindow = (csrf) => {
 const setup = (csrf) => {
   const loginButton = document.querySelector("#loginButton");
   const signupButton = document.querySelector("#signupButton");
-  const closeNotifButton = document.querySelector("#notificationContainer button");
 
   signupButton.addEventListener("click", (e) => {
     e.preventDefault();
@@ -159,11 +158,7 @@ const setup = (csrf) => {
     return false;
   });
 
-  closeNotifButton.addEventListener("click", (e) => {
-    e.preventDefault();
-    closeNotification();
-  });
-
+  createNotificationPopup();
   createLoginWindow(csrf);
 };
 
