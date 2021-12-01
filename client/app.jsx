@@ -153,6 +153,12 @@ const createTogglePremium = (csrf) => {
  * @returns React component
  */
 const TaskEditor = (props) => {
+  const getParsedContent = (content) => {
+    return props.isPremium
+    ? MarkdownIt.render(content || '__No content entered__')
+    : content || '<i>No content entered</i>';
+  }
+
   const [isEditingContent, setEditingContent] = useState(false);
   const [currentEditedContent, setEditedContent] = useState(props.content);
   
@@ -224,7 +230,7 @@ const TaskEditor = (props) => {
               <textarea
                 id="taskContent"
                 name="content"
-                placeholder="plaintext"
+                placeholder={props.isPremium ? 'Markdown' : 'plaintext'}
                 defaultValue={currentEditedContent || ''}
                 onBlur={onToggleEdit}
                 autoFocus
@@ -236,12 +242,10 @@ const TaskEditor = (props) => {
               <div
                 onClick={onToggleEdit}
                 className="contentEditClosed"
+                /* obnoxious much? */
+                dangerouslySetInnerHTML={{ __html: getParsedContent(currentEditedContent) }}
+                style={props.isPremium ? { whiteSpace: 'normal' } : { whiteSpace: 'pre' }}
               >
-                {
-                  currentEditedContent
-                    ? <p>{currentEditedContent}</p>
-                    : <i>No content entered</i>
-                }
               </div>
               <input type="hidden" name="content" value={currentEditedContent}/>
             </div>
@@ -311,6 +315,7 @@ const TaskItem = (props) => {
         title={props.title}
         content={props.content}
         value={props.value}
+        isPremium={props.isPremium}
         _id={props._id}
       />,
       document.querySelector("#editor"),
@@ -374,7 +379,10 @@ const TaskList = (props) => {
     e.preventDefault();
 
     ReactDOM.render(
-      <TaskEditor csrf={props.csrf} />,
+      <TaskEditor
+        csrf={props.csrf}
+        isPremium={props.isPremium}
+      />,
       document.querySelector("#editor"),
     );
 
@@ -411,6 +419,7 @@ const TaskList = (props) => {
                   value={task.value}
                   csrf={props.csrf}
                   exp={props.exp}
+                  isPremium={props.isPremium}
                   key={task._id}
                 />
               )
@@ -487,6 +496,7 @@ const createMainAppWindow = (csrf) => {
         tasks={resp.tasks || []}
         csrf={csrf}
         exp={resp.experience}
+        isPremium={resp.isPremium}
       />,
       document.querySelector("#taskList"),
     );
