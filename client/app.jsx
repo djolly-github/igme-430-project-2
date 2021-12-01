@@ -1,5 +1,19 @@
 const { useState } = React;
-const MarkdownIt = window.markdownit();
+const hljs = window.hljs;
+const MarkdownIt = window.markdownit({
+  highlight: function (str, lang) {
+    if (lang && hljs.getLanguage(lang)) {
+      try {
+        return '<pre class="hljs"><code>' +
+               hljs.highlight(str, { language: lang, ignoreIllegals: true }).value +
+               '</code></pre>';
+      } catch (__) {}
+    }
+  
+    return '<pre class="hljs"><code>' + MarkdownIt.utils.escapeHtml(str) + '</code></pre>';
+  }
+});
+const purify = window.DOMPurify;
 
 /**
  * Handler for change password form submit
@@ -154,9 +168,10 @@ const createTogglePremium = (csrf) => {
  */
 const TaskEditor = (props) => {
   const getParsedContent = (content) => {
-    return props.isPremium
-    ? MarkdownIt.render(content || '__No content entered__')
-    : content || '<i>No content entered</i>';
+    const parsed = props.isPremium
+      ? MarkdownIt.render(content || '__No content entered__')
+      : content || '<i>No content entered</i>';
+    return purify.sanitize(parsed);
   }
 
   const [isEditingContent, setEditingContent] = useState(false);
@@ -242,7 +257,6 @@ const TaskEditor = (props) => {
               <div
                 onClick={onToggleEdit}
                 className="contentEditClosed"
-                /* obnoxious much? */
                 dangerouslySetInnerHTML={{ __html: getParsedContent(currentEditedContent) }}
                 style={props.isPremium ? { whiteSpace: 'normal' } : { whiteSpace: 'pre' }}
               >
