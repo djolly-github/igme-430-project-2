@@ -1,4 +1,5 @@
 const { useState } = React;
+const MarkdownIt = window.markdownit();
 
 /**
  * Handler for change password form submit
@@ -469,26 +470,27 @@ const MainAppWindow = (props) => {
  * @param {*} csrf Cross Site Request Forgery token
  */
 const createMainAppWindow = (csrf) => {
-  sendAjax('GET', '/exp', `_csrf=${csrf}`, (mainResp) => {
+  let types = ['GET', 'GET', 'GET'];
+  let actions = ['/exp', '/premium', '/task'];
+  let params = [`_csrf=${csrf}`, `_csrf=${csrf}`, `_csrf=${csrf}`];
+  sendMulti(types, actions, params, (resp) => {
     ReactDOM.render(
       <MainAppWindow
-        exp={mainResp.experience}
+        exp={resp.experience}
         csrf={csrf}
       />,
       document.querySelector("#client"),
     );
-  
-    sendAjax('GET', '/task', `_csrf=${csrf}`, (listResp) => {
-      ReactDOM.render(
-        <TaskList
-          tasks={listResp.tasks || []}
-          csrf={csrf}
-          exp={mainResp.experience}
-        />,
-        document.querySelector("#taskList"),
-      );
-    });
-  })
+
+    ReactDOM.render(
+      <TaskList
+        tasks={resp.tasks || []}
+        csrf={csrf}
+        exp={resp.experience}
+      />,
+      document.querySelector("#taskList"),
+    );
+  });
 };
 
 /**
