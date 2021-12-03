@@ -1,4 +1,5 @@
 const { useState } = React;
+const moment = window.moment;
 const hljs = window.hljs;
 const MarkdownIt = window.markdownit({
   highlight: function (str, lang) {

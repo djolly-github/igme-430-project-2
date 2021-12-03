@@ -32,6 +32,9 @@ const TaskSchema = new mongoose.Schema({
     min: 0,
     default: 0,
   },
+  deadline: {
+    type: String,
+  },
 });
 
 /**
@@ -44,6 +47,7 @@ TaskSchema.statics.toAPI = (doc) => ({
   title: doc.title,
   content: doc.content,
   value: doc.value,
+  deadline: doc.deadline,
   _id: doc._id,
 });
 
@@ -61,7 +65,7 @@ TaskSchema.statics.toAPI = (doc) => ({
 TaskSchema.statics.findByOwner = (ownerId, callback) => {
   return TaskModel
     .find({ owner: convertId(ownerId) })
-    .select('title content value _id')
+    .select('title content value deadline _id')
     .lean()
     .exec(callback);
 };

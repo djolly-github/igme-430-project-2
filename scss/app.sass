@@ -29,12 +29,19 @@
       padding: 1rem
       .taskTitle
         flex: 0 0 50%
-        text-overflow: ellipsis
-        white-space: nowrap
         overflow: hidden
-        font-size: 2rem
-        line-height: 2rem
-        margin: 0 0 0 1rem
+        position: relative
+        .taskTitleElement
+          text-overflow: ellipsis
+          white-space: nowrap
+          overflow: hidden
+          font-size: 2rem
+          line-height: 2rem
+          margin: 0 0 0 1rem
+        .indicator
+          margin: 0 0 0 2rem
+          font-size: 0.75rem
+          opacity: 0.6
       .control.group
         flex: 1 1 auto
 
@@ -80,7 +87,7 @@ form
       flex: 1 1 auto
     p
       margin: 0
-    &:nth-of-type(3)
+    &:nth-last-child(2)
       max-width: 85%
   /* content preview box */
   .contentEditClosed

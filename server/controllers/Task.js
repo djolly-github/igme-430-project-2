@@ -42,6 +42,7 @@ const createTask = (request, response) => {
       title: req.body.title,
       content: req.body.content,
       value: req.body.value,
+      deadline: req.body.deadline,
     };
 
     return Task.TaskModel.updateOne({ _id: req.body._id }, updated, (err) => {
@@ -58,6 +59,7 @@ const createTask = (request, response) => {
     content: req.body.content,
     value: req.body.value,
     owner: req.session.account._id,
+    deadline: req.body.deadline,
   };
   const newTask = new Task.TaskModel(taskData);
 

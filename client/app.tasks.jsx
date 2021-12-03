@@ -94,6 +94,17 @@ const TaskEditor = (props) => {
       </div>
 
       {
+        props.isPremium
+          ?
+          <div className="control">
+            <label htmlFor="taskDeadline">Deadline: </label>
+            <input id="taskDeadline" type="date" name="deadline" defaultValue={props.deadline || null}/>
+          </div>
+          :
+            <input id="taskDeadline" type="date" name="deadline" defaultValue={props.deadline || null} hidden/>
+      }
+
+      {
         isEditingContent
           ?
             <div className="control">
@@ -144,6 +155,22 @@ const TaskEditor = (props) => {
  */
 const TaskItem = (props) => {
   /**
+   * Gets formatted timestamp and relative time for a due date
+   * @param {*} date The date string in YYYY-MM-DD
+   * @returns String with relative due and actual date in parenthesis
+   * @example
+   * // returns 'Due in 6 days (12/10/2021)' if Date.Now is '2021-12-03'
+   * getFormattedDeadline('2021-12-10')
+   * @example
+   * // returns 'Due 3 days ago (12/1/2021)' if Date.Now is '2021-12-03'
+   * getFormattedDeadline('2021-12-01')
+   */
+  const getFormattedDeadline = (date) => {
+    const dateObj = new Date(`${date} 00:00`);
+    return `Due ${moment(date).fromNow()} (${dateObj.toLocaleDateString()})`;
+  };
+
+  /**
    * Handler for the Delete button
    * @param {*} e event caller object
    * @returns false
@@ -188,6 +215,7 @@ const TaskItem = (props) => {
         title={props.title}
         content={props.content}
         value={props.value}
+        deadline={props.deadline}
         isPremium={props.isPremium}
         _id={props._id}
       />,
@@ -206,11 +234,34 @@ const TaskItem = (props) => {
     <div
       className="task"
     >
-      <p
+      <div
         className="taskTitle"
       >
-        { props.title }
-      </p>
+        <p
+          className="taskTitleElement"
+        >
+          { props.title }
+        </p>
+        {
+          props.isPremium
+            ?
+              props.deadline
+                ?
+                  <p
+                    className="indicator"
+                  >
+                    { getFormattedDeadline(props.deadline) }
+                  </p>
+                :
+                  <p
+                    className="indicator"
+                  >
+                    <i>No deadline set</i>
+                  </p>
+            :
+              <div></div>
+        }
+      </div>
       <div
         className="control group"
       >
@@ -290,6 +341,7 @@ const TaskList = (props) => {
                   title={task.title}
                   content={task.content}
                   value={task.value}
+                  deadline={task.deadline}
                   csrf={props.csrf}
                   exp={props.exp}
                   isPremium={props.isPremium}
