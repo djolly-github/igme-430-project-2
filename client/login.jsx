@@ -1,56 +1,31 @@
 /**
- * Handler for login form submit
- * @param {*} e event object
- * @returns false (to exit early)
- */
-const handleLogin = (e) => {
-  e.preventDefault();
-
-  $("#notificationContainer").toggleClass('active', false);
-
-  if ($("#user").val() == '' || $("#pass").val() == '') {
-    openNotification("Username or password is empty");
-    return false;
-  }
-
-  console.log($("input[name=_csrf").val());
-
-  sendAjax('POST', $("#loginForm").attr("action"), $("#loginForm").serialize(), redirect);
-
-  return false;
-};
-
-/**
- * Handler for signup form submit
- * @param {*} e event object
- * @returns false (to exit early)
- */
-const onSignup = (e) => {
-  e.preventDefault();
-
-  $("#notificationContainer").toggleClass('active', false);
-
-  if ($("#user").val() == '' || $("#pass").val() == '' || $("#pass2").val() == '') {
-    openNotification("All fields are required");
-    return false;
-  }
-
-  if ($("#pass").val() !== $("#pass2").val()) {
-    openNotification(("Passwords do not match"));
-    return false;
-  }
-
-  sendAjax('POST', $("#signupForm").attr("action"), $("#signupForm").serialize(), redirect);
-
-  return false;
-};
-
-/**
  * View for the Login Window
  * @param {*} props React props
  * @returns React component
  */
 const LoginWindow = (props) => {
+  /**
+   * Handler for login form submit
+   * @param {*} e event object
+   * @returns false (to exit early)
+   */
+  const handleLogin = (e) => {
+    e.preventDefault();
+
+    $("#notificationContainer").toggleClass('active', false);
+
+    if ($("#user").val() == '' || $("#pass").val() == '') {
+      openNotification("Username or password is empty");
+      return false;
+    }
+
+    console.log($("input[name=_csrf").val());
+
+    sendAjax('POST', $("#loginForm").attr("action"), $("#loginForm").serialize(), redirect);
+
+    return false;
+  };
+
   return (
     <form
       id="loginForm"
@@ -84,6 +59,31 @@ const LoginWindow = (props) => {
  * @returns React component
  */
 const SignupWindow = (props) => {
+  /**
+   * Handler for signup form submit
+   * @param {*} e event object
+   * @returns false (to exit early)
+   */
+  const onSignup = (e) => {
+    e.preventDefault();
+
+    $("#notificationContainer").toggleClass('active', false);
+
+    if ($("#user").val() == '' || $("#pass").val() == '' || $("#pass2").val() == '') {
+      openNotification("All fields are required");
+      return false;
+    }
+
+    if ($("#pass").val() !== $("#pass2").val()) {
+      openNotification(("Passwords do not match"));
+      return false;
+    }
+
+    sendAjax('POST', $("#signupForm").attr("action"), $("#signupForm").serialize(), redirect);
+
+    return false;
+  };
+
   return (
     <form
       id="signupForm"

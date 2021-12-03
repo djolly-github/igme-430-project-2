@@ -118,6 +118,16 @@ const router = (app) => {
     mid.requiresSecure,
     ctrl.Account.updateExperience,
   );
+
+  // route errors
+  app.use((req, res) => {
+    res.status(404).render('404');
+  });
+
+  app.use((err, req, res) => {
+    console.log(err);
+    res.status(500).render('500');
+  });
 };
 
 module.exports = router;

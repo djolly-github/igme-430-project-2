@@ -19,7 +19,7 @@ const getTasks = (request, response) => {
       return res.status(400).json({ error: 'An error occurred' });
     }
 
-    return res.json({ tasks: docs });
+    return res.status(200).json({ tasks: docs });
   });
 };
 
@@ -62,7 +62,7 @@ const createTask = (request, response) => {
   const newTask = new Task.TaskModel(taskData);
 
   const taskPromise = newTask.save();
-  taskPromise.then(() => res.json({ redirect: ROUTES.home }));
+  taskPromise.then(() => res.status(201).json({ redirect: ROUTES.home }));
   taskPromise.catch((err) => {
     console.log(err);
     return res.status(400).json({ error: 'An error occurred' });
@@ -86,7 +86,7 @@ const deleteTask = (request, response) => {
       return res.status(400).json({ error: 'An error occurred' });
     }
 
-    return res.json({ redirect: ROUTES.home });
+    return res.status(200).json({ redirect: ROUTES.home });
   });
 };
 

@@ -3,7 +3,7 @@
  * @param {*} props React props
  * @returns React component
  */
- const TaskEditor = (props) => {
+const TaskEditor = (props) => {
    /**
     * Converts user raw markdown input to sanatized HTML
     * @param {*} content The raw/pre-parsed string
