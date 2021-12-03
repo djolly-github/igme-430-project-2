@@ -1,56 +1,31 @@
 /**
- * Handler for login form submit
- * @param {*} e event object
- * @returns false (to exit early)
- */
-const handleLogin = (e) => {
-  e.preventDefault();
-
-  $("#notificationContainer").toggleClass('active', false);
-
-  if ($("#user").val() == '' || $("#pass").val() == '') {
-    openNotification("Username or password is empty");
-    return false;
-  }
-
-  console.log($("input[name=_csrf").val());
-
-  sendAjax('POST', $("#loginForm").attr("action"), $("#loginForm").serialize(), redirect);
-
-  return false;
-};
-
-/**
- * Handler for signup form submit
- * @param {*} e event object
- * @returns false (to exit early)
- */
-const onSignup = (e) => {
-  e.preventDefault();
-
-  $("#notificationContainer").toggleClass('active', false);
-
-  if ($("#user").val() == '' || $("#pass").val() == '' || $("#pass2").val() == '') {
-    openNotification("All fields are required");
-    return false;
-  }
-
-  if ($("#pass").val() !== $("#pass2").val()) {
-    openNotification(("Passwords do not match"));
-    return false;
-  }
-
-  sendAjax('POST', $("#signupForm").attr("action"), $("#signupForm").serialize(), redirect);
-
-  return false;
-};
-
-/**
  * View for the Login Window
  * @param {*} props React props
  * @returns React component
  */
 const LoginWindow = (props) => {
+  /**
+   * Handler for login form submit
+   * @param {*} e event object
+   * @returns false (to exit early)
+   */
+  const handleLogin = (e) => {
+    e.preventDefault();
+
+    $("#notificationContainer").toggleClass('active', false);
+
+    if ($("#user").val() == '' || $("#pass").val() == '') {
+      openNotification("Username or password is empty");
+      return false;
+    }
+
+    console.log($("input[name=_csrf").val());
+
+    sendAjax('POST', $("#loginForm").attr("action"), $("#loginForm").serialize(), redirect);
+
+    return false;
+  };
+
   return (
     <form
       id="loginForm"
@@ -60,17 +35,17 @@ const LoginWindow = (props) => {
       method="POST"
       className="mainForm"
     >
-      <div class="control">
+      <div className="control">
         <label htmlFor="username">Username: </label>
         <input id="user" type="text" name="username" placeholder="username"/>
       </div>
 
-      <div class="control">
+      <div className="control">
         <label htmlFor="pass">Password: </label>
         <input id="pass" type="password" name="pass" placeholder="password"/>
       </div>
 
-      <div class="control">
+      <div className="control">
         <input type="hidden" name="_csrf" value={props.csrf}/>
         <input className="formSubmit" type="submit" value="Sign In" />
       </div>
@@ -84,6 +59,31 @@ const LoginWindow = (props) => {
  * @returns React component
  */
 const SignupWindow = (props) => {
+  /**
+   * Handler for signup form submit
+   * @param {*} e event object
+   * @returns false (to exit early)
+   */
+  const onSignup = (e) => {
+    e.preventDefault();
+
+    $("#notificationContainer").toggleClass('active', false);
+
+    if ($("#user").val() == '' || $("#pass").val() == '' || $("#pass2").val() == '') {
+      openNotification("All fields are required");
+      return false;
+    }
+
+    if ($("#pass").val() !== $("#pass2").val()) {
+      openNotification(("Passwords do not match"));
+      return false;
+    }
+
+    sendAjax('POST', $("#signupForm").attr("action"), $("#signupForm").serialize(), redirect);
+
+    return false;
+  };
+
   return (
     <form
       id="signupForm"
@@ -93,22 +93,22 @@ const SignupWindow = (props) => {
       method="POST"
       className="mainForm"
     >
-      <div class="control">
+      <div className="control">
         <label htmlFor="username">Username: </label>
         <input id="user" type="text" name="username" placeholder="username"/>
       </div>
 
-      <div class="control">
+      <div className="control">
         <label htmlFor="pass">Password: </label>
         <input id="pass" type="password" name="pass" placeholder="password"/>
       </div>
 
-      <div class="control">
+      <div className="control">
         <label htmlFor="pass2">Password: </label>
         <input id="pass2" type="password" name="pass2" placeholder="retype password"/>
       </div>
 
-      <div class="control">
+      <div className="control">
         <input type="hidden" name="_csrf" value={props.csrf}/>
         <input className="formSubmit" type="submit" value="Sign Up" />
       </div>
@@ -145,7 +145,6 @@ const createSignupWindow = (csrf) => {
 const setup = (csrf) => {
   const loginButton = document.querySelector("#loginButton");
   const signupButton = document.querySelector("#signupButton");
-  const closeNotifButton = document.querySelector("#notificationContainer button");
 
   signupButton.addEventListener("click", (e) => {
     e.preventDefault();
@@ -159,11 +158,7 @@ const setup = (csrf) => {
     return false;
   });
 
-  closeNotifButton.addEventListener("click", (e) => {
-    e.preventDefault();
-    closeNotification();
-  });
-
+  createNotificationPopup();
   createLoginWindow(csrf);
 };
 

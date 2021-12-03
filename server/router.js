@@ -102,6 +102,32 @@ const router = (app) => {
     mid.requiresSecure,
     ctrl.Task.deleteTask,
   );
+
+  // route experience retrieval
+  app.get(
+    ROUTES._experience,
+    mid.requiresLogin,
+    mid.requiresSecure,
+    ctrl.Account.getExperience,
+  );
+
+  // route experience update
+  app.post(
+    ROUTES._experience,
+    mid.requiresLogin,
+    mid.requiresSecure,
+    ctrl.Account.updateExperience,
+  );
+
+  // route errors
+  app.use((req, res) => {
+    res.status(404).render('404');
+  });
+
+  app.use((err, req, res) => {
+    console.log(err);
+    res.status(500).render('500');
+  });
 };
 
 module.exports = router;

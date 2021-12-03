@@ -196,6 +196,46 @@ const getPremiumStatus = (request, response) => {
   });
 };
 
+/**
+ * Handler for user experience update
+ * @param {*} request request object
+ * @param {*} response response object
+ * @returns response.status().json() depending on request parameters
+ */
+const updateExperience = (request, response) => {
+  const req = request;
+  const res = response;
+
+  const { username } = req.session.account;
+
+  return Account.AccountModel.updateExperience(username, req.body.experience, (err) => {
+    if (err) {
+      return res.status(500).json({ error: 'An error occurred' });
+    }
+
+    return res.status(200).json({ message: 'Experience updated successfully' });
+  });
+};
+
+/**
+ * Handler for user experience get
+ * @param {*} request request object
+ * @param {*} response response object
+ * @returns response.status().json() depending on request parameters
+ */
+const getExperience = (request, response) => {
+  const req = request;
+  const res = response;
+
+  return Account.AccountModel.findByUsername(req.session.account.username, (err, doc) => {
+    if (err || !doc) {
+      return res.status(500).json({ error: 'An error occurred' });
+    }
+
+    return res.status(200).json({ experience: doc.experience });
+  });
+};
+
 module.exports.loginPage = loginPage;
 module.exports.login = login;
 module.exports.logout = logout;
@@ -204,3 +244,5 @@ module.exports.getToken = getToken;
 module.exports.changePassword = changePassword;
 module.exports.togglePremium = togglePremium;
 module.exports.getPremiumStatus = getPremiumStatus;
+module.exports.updateExperience = updateExperience;
+module.exports.getExperience = getExperience;

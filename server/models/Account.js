@@ -53,6 +53,10 @@ const AccountSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  experience: {
+    type: Number,
+    default: 0,
+  },
 });
 
 /**
@@ -64,6 +68,7 @@ AccountSchema.statics.toAPI = (doc) => ({
   // _id is built into your mongo document and is guaranteed to be unique
   username: doc.username,
   isPremium: doc.isPremium,
+  experience: doc.experience,
   _id: doc._id,
 });
 
@@ -160,6 +165,33 @@ AccountSchema.statics.togglePremium = (username, callback) => {
     }
 
     return AccountModel.updateOne({ username }, { isPremium: !doc.isPremium }, (errUpd) => {
+      if (errUpd) {
+        return callback(errUpd);
+      }
+
+      return callback();
+    });
+  });
+};
+
+/**
+ * Updates user's experience
+ * @param {*} username The username of the account to update
+ * @param {*} experience The new value of the user's experience
+ * @param {*} callback Function to call on result of toggle
+ */
+// eslint will error for immediately returning for arrow-body-style,
+// then will error if arrow-body-style is fixed because of max line length,
+// then will error if max line length is fixed for disallowing line breaks after arrow body,
+// so just disable this error instead
+// eslint-disable-next-line arrow-body-style
+AccountSchema.statics.updateExperience = (username, experience, callback) => {
+  return AccountModel.findByUsername(username, (err, doc) => {
+    if (err || !doc) {
+      return callback(err);
+    }
+
+    return AccountModel.updateOne({ username }, { experience }, (errUpd) => {
       if (errUpd) {
         return callback(errUpd);
       }
