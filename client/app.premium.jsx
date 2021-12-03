@@ -37,12 +37,10 @@ const TogglePremiumWindow = (props) => {
   return (
     <div>
       <h2>Premium</h2>
-      <p>With premium, you have access to styling note text, labels, checklists, deadlines</p>
+      <p>With premium, you have access to additional features!</p>
       <ul>
         <li>Text styling: no longer will your tasks be just plaintext!</li>
-        <li>Labels: categorize your tasks and search for them later!</li>
-        <li>Checklists: make your tasks a list of tasks!</li>
-        <li>Deadlines: add deadlines to your tasks!</li>
+        <li>Deadlines: add deadlines to your tasks and see them right on the home page!</li>
       </ul>
       <p>You currently {premiumStatement} premium</p>
       <p>Toggle Premium?</p>
